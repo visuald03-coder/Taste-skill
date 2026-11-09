@@ -1,52 +1,44 @@
-# Taste — publish-grade imagery from one plain-language prompt
+# Taste — same model, one plain sentence, publish-grade output
 
-**Taste** is a skill for AI coding agents — Qoder, Claude Code, Codex, Cursor. You describe the shot you want in one ordinary sentence; you get an image that already clears the bar a brand would publish at, and the same bar holds across a whole batch instead of only in the lucky first frame.
+**Taste** is a skill for AI coding agents — Qoder, Claude Code, Codex, Cursor. One ordinary sentence in, one image out that already clears the bar a brand would publish at — and the same bar holds across a whole batch, not just in the lucky first frame.
 
 Built by [Sure · AI](https://www.sureflow-ai.com) — *Stay On Brand*.
 
 ---
 
-## The problem this solves
+## Why the output looks different
 
-A general model can make a pretty picture. What it cannot do reliably is make **twenty** pictures that look like they came from the same shoot, on the same brand, at a quality you can ship without a retouch pass. The gap is not the model — it is that nobody told the model what "good" means for your category.
+Taste is not hiding a better model behind the interface. Ask for `nano-banana-pro` and that is exactly what runs — the same model you can call anywhere. **What differs is what the model is told before it draws.**
 
-Taste closes that gap with a curated brand-visual knowledge base sitting behind the generation step: **29 documented style branches across 7 product categories** — apparel, beauty & personal care, footwear & bags, sports & outdoor, food & beverage, café, home & furniture — each branch written up as an executable visual standard (composition, light, material rendering, lens and camera distance, colour discipline, what must never appear in frame). Every prompt you send is resolved against that standard, so the output lands at a Pinterest-grade level of polish from the first pass rather than after three rounds of "make it look expensive".
+| | The bare model | Taste |
+| --- | --- | --- |
+| What you have to write | Several hundred words of styling instructions — composition, light, material, lens, mood, negatives — and it still misses | One sentence: *"a linen sofa in a wabi-sabi living room, morning light from the left, 3:4"* |
+| Where "good" comes from | Whatever the model absorbed; it redefines it every shot | A curated brand-visual knowledge base: **29 documented style branches across 7 product categories** — apparel, beauty & personal care, footwear & bags, sports & outdoor, food & beverage, café, home & furniture |
+| What each branch holds | — | An executable visual standard: composition, light, material rendering, lens and camera distance, colour discipline, what must never appear in frame |
+| Across a batch of twenty | The first frame is fine, the rest drift | The same shoot, the same brand, twenty frames deep |
+| After it returns | Usually a retouch pass, usually a rewrite pass | Usually shipped as-is |
 
-## What you actually type
-
-Nothing close to a prompt-engineering template.
-
-```
-a linen sofa in a wabi-sabi living room, morning light from the left, 3:4
-```
-
-That is a complete instruction. Colour, material, light, composition and aspect can all be stated the way you would say them to a photographer; the skill turns them into the specification the generation step needs.
+That is the whole pitch: **a high-aesthetic result is normally something you have to describe at length and then curate. Here it is the default, and you spend one sentence to get it.**
 
 ## Install
 
-1. Put this folder into your agent's skills directory.
-   - Qoder: `~/.qoder-cn/skills/`
-   - Claude Code / Codex / Cursor: anywhere the agent can read `SKILL.md`, `CLAUDE.md`, `AGENTS.md` and `.cursor/rules/`
+1. Put this folder into your agent's skills directory (Qoder: `~/.qoder-cn/skills/`; Claude Code / Codex / Cursor: anywhere the agent can read `SKILL.md`, `CLAUDE.md`, `AGENTS.md`, `.cursor/rules/`).
 2. Copy `config/config.example.json` to `config/config.json`.
-3. Say **"install this for me"**. The agent runs its own zero-cost self-check, tells you the one thing missing if there is anything missing, and writes your key into the config for you.
+3. Say **"install this for me"** — the agent runs its own zero-cost self-check, names the one thing missing if anything is missing, and writes your key into the config itself.
 
-Requires Node.js. No Python, no local model, no GPU.
+Needs Node.js. No Python, no local model, no GPU.
 
-## Usage
+## Use it
 
 | Intent | Command |
 | --- | --- |
-| Verify the install (free) | `node scripts/aesthetic-generate.js --check` |
 | One image | `node scripts/aesthetic-generate.js --prompt "…"` |
-| A whole batch, one prompt per line | `node scripts/aesthetic-generate.js --prompt-file batch.txt` |
-| Pick the model and the aspect ratio | `node scripts/aesthetic-generate.js --prompt "…" --model nano-banana-2 --range 16:9` |
-| A workbench card that stopped opening | `node scripts/aesthetic-generate.js --links 9237` — free, no new task |
+| A whole batch, one prompt per line | `… --prompt-file batch.txt` |
+| Model and aspect ratio | `… --prompt "…" --model nano-banana-2 --range 16:9` |
+| A workbench card that stopped opening (free) | `… --links 9237` |
+| Verify the install (free) | `… --check` |
 
-**On batches.** One line is one task. A line that fails does not stop the run: you get `M done / K not done` with the failing line numbers, and you re-run only those. Only three conditions abort a batch — an invalid key, no credits, no connection — and each is stated in one plain sentence. A list holds up to 50 prompts; past that the script stops and asks you to split rather than silently overrunning.
-
-**Where the images go.** Into your own preview workbench under your own account, not scattered across your disk. Each line reports its task number as it completes; that number is all you need later if a card needs refreshing.
-
-**Where the list comes from.** A txt you typed, or one column copied out of a spreadsheet — Feishu, Excel, anything. Either way it becomes a one-line-per-prompt txt before it runs. This package never reads your spreadsheet account and never asks for its permissions.
+A batch reports `M done / K not done` with the failing line numbers and keeps going; only an invalid key, no credits, or no connection aborts it. Lists hold up to 50 lines. Your images land in **your own preview workbench** under your own account, not scattered across your disk. The list can be typed, or one column copied out of a spreadsheet — this package never reads your spreadsheet account and never asks for its permissions.
 
 ## Showcase
 
@@ -65,18 +57,14 @@ Requires Node.js. No Python, no local model, no GPU.
 
 Representative output at default settings.
 
-## Account, cost, and what is not in this repository
+## Account and cost
 
-- **Bring your own `api_key`**, issued to your Sure account at [sureflow-ai.com](https://www.sureflow-ai.com). You paste it to your agent once; it writes it into the local config itself and never repeats it back into the conversation, not even a masked fragment.
-- **No credential of any kind is committed here.** The service endpoint that ships in `config/config.example.json` and the generation script validates the key server-side, so a public URL is not an open door — an invalid key is rejected before any task is created.
-- **Billed per image; a run that fails is not billed.** Before a batch starts, the count is stated out loud, so nothing is spent without you saying go.
+- **Bring your own `api_key`**, issued to your Sure account at [sureflow-ai.com](https://www.sureflow-ai.com). You paste it to your agent once; it writes it into the local config and never repeats it back into the conversation, not even a masked fragment.
+- **No credential of any kind is committed here.** The endpoint that ships in this repository validates the key server-side, so a public URL is not an open door — an invalid key is rejected before any task is created.
+- **Billed per image; a run that fails is not billed.** The count is stated out loud before a batch starts, so nothing is spent without you saying go.
 
 ## Not in this version
 
-Reference images are not accepted. The create call drops them server-side, so the interface says so instead of pretending: if you want "the same feel as this picture", describe the feel — colour, material, light, composition, camera distance.
+Reference images are not accepted — the create call drops them server-side, so the interface says so instead of pretending. If you want "the same feel as this picture", write the feel: colour, material, light, composition, camera distance.
 
-## About Sure · AI
-
-Sure turns working production lines into skills you install into your own AI assistant: images, video, resizing, and the content tooling around them. Per-image pricing, failed runs not billed, output kept inside your own account.
-
-**[www.sureflow-ai.com](https://www.sureflow-ai.com)**
+**[www.sureflow-ai.com](https://www.sureflow-ai.com)** · Sure turns working production lines into skills you install into your own AI assistant.
