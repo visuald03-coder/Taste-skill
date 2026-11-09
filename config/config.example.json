@@ -1,0 +1,24 @@
+{
+  "_说明": "复制成 config/config.json 后只有 api_key 这一项要填：去 https://www.sureflow-ai.com 注册登录，在自己账号里复制那串 sk- 开头的密钥发给智能体，由它写进这一栏（用户不用自己打开文件改 json）。写进去之后这串值不再从对话里念出来，打了码也不行。其余保持默认即可。",
+  "gateway_url": "https://zion-app.functorz.com/zero/9G6nZlvZyKB/api/graphql-v2",
+  "api_key": "<YOUR_API_KEY>",
+  "model": "nano-banana-pro",
+  "size": "2K",
+  "range": "3:4",
+  "channel": "flagship",
+  "output_dir": "",
+  "max_wait_sec": 600,
+  "poll_interval_sec": 5,
+  "_字段说明": {
+    "api_key": "你在 https://www.sureflow-ai.com 注册登录后、自己账号里的那串 sk- 开头的钥匙。发给智能体，由它写进这一栏；它不会把这串念回对话里（打码片段、长度也算泄露），不进群、不进截图、不进日志。",
+    "gateway_url": "服务地址，由服务方提供，照抄即可，不需要你改。",
+    "model": "nano-banana-pro 通用推荐；nano-banana-2 细节更丰富。",
+    "size": "当前只承诺 2K。",
+    "range": "画幅比例，例如 3:4（竖版海报）、1:1（方图）、16:9（横版）、9:16（手机全屏）。",
+    "channel": "渠道标识，保持 flagship 即可。",
+    "output_dir": "默认留空，也不用向用户提这一项。留空＝本机不落文件，图就在你自己那一屏的预览工作台里，屏幕上逐条报任务号（卡片约 2 天后点不开，说一句「把那几条再给我一次」就跑 --links 任务号 免费刷新，不花钱）。只有用户自己主动明确要本机那一份时，才填一个他指定的文件夹路径＝每张也在本机存一份，_批次台账.csv 跟着进同一个夹子。",
+    "max_wait_sec": "一次生成最长等多久（秒）。排队久时到点会报“本次未完成”，不会重复计费。",
+    "poll_interval_sec": "查询进度的间隔（秒），不用改。"
+  },
+  "_preview_workbench_url说明": "预览工作台地址 https://www.sureflow-ai.com/m3lyajgm8#工作台-收图 ：用自己账号打开，进去就是自己这一批的图卡片，接着能送到画布做局部重绘、扩图、当垫图。看图和改图都在这一屏，屏幕上不贴单张图的裸网址。这一项不用填、也不用改，本包只往你自己账号那一屏交图，别的页面、别的账号都动不到。"
+}
